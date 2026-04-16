@@ -221,24 +221,18 @@ Return ONLY a JSON object with exactly this structure, no markdown, no extra tex
 Make the email feel human and genuine, not templated. Keep it concise and focused on a single clear call to action.`;
 
     try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          messages: [{ role: 'user', content: prompt }]
-        })
-      });
+      const response = await fetch('https://web-production-a3b85.up.railway.app/generate', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ prompt })
+});
 
-      const data = await response.json();
-      const raw = data.content[0].text.trim();
-      const parsed = JSON.parse(raw);
+const data = await response.json();
 
-      document.getElementById('subject-text').textContent = parsed.subject;
-      document.getElementById('email-body').textContent = parsed.body;
-      document.getElementById('result-card').style.display = 'block';
-      document.getElementById('result-card').scrollIntoView({ behavior: 'smooth' });
+document.getElementById('subject-text').textContent = data.subject;
+document.getElementById('email-body').textContent = data.body;
+document.getElementById('result-card').style.display = 'block';
+document.getElementById('result-card').scrollIntoView({ behavior: 'smooth' });
 
     } catch(err) {
       alert('Something went wrong. Please try again.');
