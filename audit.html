@@ -137,7 +137,7 @@
   <div class="question-card" id="q3">
     <div class="question-num">Question 3 of 10</div>
     <div class="question-text">How many hours per week does your team spend on repetitive manual tasks?</div>
-    <div class="question-sub">Think about tasks that feel like busywork — copy-pasting, chasing people, re-entering data.</div>
+    <div class="question-sub">Count the total across your whole team — not per person. Think copy-pasting, chasing people, re-entering data between systems.</div>
     <div class="options-grid">
       <button class="option-btn" onclick="selectOption('q3', 'Less than 5 hours', this)">Less than 5 hours</button>
       <button class="option-btn" onclick="selectOption('q3', '5-10 hours', this)">5–10 hours</button>
@@ -231,22 +231,25 @@
   </div>
 
   <!-- Q9: What would you do -->
-  <div class="question-card" id="q9">
-    <div class="question-num">Question 9 of 10</div>
-    <div class="question-text">If you got 10 hours back every week, what would you do with them?</div>
-    <div class="question-sub">Dream a little. This helps us understand what you're really working toward.</div>
-    <div class="options-grid">
-      <button class="option-btn" onclick="selectOption('q9', 'Grow sales and bring in more customers', this)">📈 Grow sales</button>
-      <button class="option-btn" onclick="selectOption('q9', 'Spend more time on the craft or service I love', this)">❤️ Do what I love</button>
-      <button class="option-btn" onclick="selectOption('q9', 'Spend more time with family', this)">👨‍👩‍👧 Family time</button>
-      <button class="option-btn" onclick="selectOption('q9', 'Improve the quality of my products or services', this)">⭐ Improve quality</button>
-      <button class="option-btn full-width" onclick="selectOption('q9', 'Finally take a real vacation', this)">🌴 Take a real vacation</button>
-    </div>
-    <div class="nav-btns">
-      <button class="back-btn" onclick="prevQ(9)">← Back</button>
-      <button class="primary" onclick="nextQ(9)">Next →</button>
-    </div>
+<div class="question-card" id="q9">
+  <div class="question-num">Question 9 of 10</div>
+  <div class="question-text">If you got 10 hours back every week, what would you do with them?</div>
+  <div class="question-sub">Select all that apply — dream as big as you want.</div>
+  <div class="options-grid">
+    <button class="option-btn" onclick="toggleMulti('q9', 'Grow sales and bring in more customers', this)">📈 Grow sales</button>
+    <button class="option-btn" onclick="toggleMulti('q9', 'Spend more time on the craft or service I love', this)">❤️ Do what I love</button>
+    <button class="option-btn" onclick="toggleMulti('q9', 'Spend more time with family', this)">👨‍👩‍👧 Family time</button>
+    <button class="option-btn" onclick="toggleMulti('q9', 'Improve the quality of my products or services', this)">⭐ Improve quality</button>
+    <button class="option-btn" onclick="toggleMulti('q9', 'Finally take a real vacation', this)">🌴 Take a real vacation</button>
+    <button class="option-btn" onclick="toggleMulti('q9', 'Invest in learning and growing my skills', this)">📚 Learn and grow</button>
+    <button class="option-btn" onclick="toggleMulti('q9', 'Give back to my community', this)">🤝 Give back</button>
+    <button class="option-btn" onclick="toggleMulti('q9', 'Something else', this)">✨ Something else</button>
   </div>
+  <div class="nav-btns">
+    <button class="back-btn" onclick="prevQ(9)">← Back</button>
+    <button class="primary" onclick="nextQ(9)">Next →</button>
+  </div>
+</div>
 
   <!-- Q10: Budget -->
   <div class="question-card" id="q10">
@@ -317,7 +320,7 @@
 
 <script>
   const answers = {};
-  const multiAnswers = { q4: [] };
+  const multiAnswers = { q4: [], q9: [] };
 
   function selectOption(q, value, btn) {
     document.querySelectorAll(`#${q} .option-btn`).forEach(b => b.classList.remove('selected'));
@@ -345,7 +348,7 @@
 
   function nextQ(current) {
     const isText = ['q5', 'q7'].includes(`q${current}`);
-    const isMulti = current === 4;
+    const isMulti = current === 4 || current === 9;
 
     if (isText) {
       const val = document.getElementById(`q${current}-text`).value.trim();
@@ -354,7 +357,7 @@
     } else if (!isMulti && !answers[`q${current}`]) {
       alert('Please select an option before continuing.');
       return;
-    } else if (isMulti && (!answers.q4 || answers.q4.length === 0)) {
+    } else if (isMulti && (!answers[`q${current}`] || answers[`q${current}`].length === 0)) {
       alert('Please select at least one option.');
       return;
     }
