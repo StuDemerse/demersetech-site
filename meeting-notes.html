@@ -146,25 +146,26 @@ ${notes}
 
 Instructions: ${formatInstructions[format]}
 
-Be specific — extract actual names, tasks, deadlines, and decisions from the notes. Do not invent information that isn't there. If something is unclear, flag it as an open question.`;
+Be specific — extract actual names, tasks, deadlines, and decisions from the notes. Do not invent information that isn't there. If something is unclear, flag it as an open question.
+
+Return ONLY a JSON object with exactly this structure, no markdown, no extra text:
+{
+  "result": "<your full summary here, using \\n for line breaks>"
+}`;
 
     document.getElementById('summarizeBtn').disabled = true;
     document.getElementById('loading').style.display = 'block';
     document.getElementById('result-card').style.display = 'none';
 
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
+      const res = await fetch('https://web-production-a3b85.up.railway.app/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          messages: [{ role: 'user', content: prompt }]
-        })
+        body: JSON.stringify({ prompt })
       });
 
       const data = await res.json();
-      const text = data.content?.[0]?.text || '';
+      const text = data.result || '';
 
       const titleEl = document.getElementById('result-title');
       titleEl.textContent = title ? `Summary — ${title}` : 'Meeting Summary';
